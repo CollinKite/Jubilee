@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#login {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px #ccc;
+    margin: 10% auto;
+    padding: 5%;
+    width: 25%;
+    text-align: center;
+}
+
+/* make all text boxes rounded */
+
+input[type=text], input[type=password] {
+    border: 1px solid #bde1fd;
+    border-radius: 5px;
+    padding: 5px;
+    width: 100%;
+    margin: 5px;
+    height: 25px;
+}
+
+#submit {
+    border: 1px solid #2699fb;
+    border-radius: 5px;
+    padding: 5px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2%;
+    min-width: 32%;
+    min-height: 50px;
+    color: white;
+    background-color: #2699fb;
+}
+
+#submit:hover {
+    background-color: #0091ff;
+}
+
+/* add background image*/
+
+body {
+    background-image: url("../images/loginBG.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
