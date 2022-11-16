@@ -9,8 +9,8 @@ const SignUp = () => {
           <input type={"text"} placeholder={"Full Name"} className={"input"}/>
           <input type={"text"} placeholder={"Email"} className={"input"}/>
           <input type={"text"} placeholder={"Phone Number"} className={"input"}/>
-          <input type={"text"} placeholder={"Password"} className={"input"}/>
-          <input type={"text"} placeholder={"Confirm Password"} className={"input"}/>
+          <input type={"password"} placeholder={"Password"} className={"input"}/>
+          <input type={"password"} placeholder={"Confirm Password"} className={"input"}/>
           <input type={"submit"} className={"submit"}/>
       </form>
     </div>

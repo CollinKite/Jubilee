@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './index.css';
 import { BrowserRouter as Router, Routes, Route}from 'react-router-dom';
 import Navbar from './components/navbar';
 import Login from './pages/login';
@@ -8,7 +8,7 @@ import SignUp from './pages/signup';
 function App() {
 return (
 	<Router>
-    <Navbar/>
+    {/* <Navbar/> */}
     <Routes>
       <Route exact path='/' element={<Login/>} />
       <Route path='/login' element={<Login/>} />

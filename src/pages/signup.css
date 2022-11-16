@@ -6,12 +6,12 @@
   min-width: 30%;
   min-height: 50px;
   padding-left: 20px;
-  border-color: aqua;
+  border-color: #bde1fd ;
   border-style: solid;
 }
 
 ::placeholder {
-    color: aqua;
+    color: #bde1fd ;
 }
 .submit {
     display: block;
@@ -21,5 +21,5 @@
   min-width: 32%;
   min-height: 50px;
   color: white;
-  background-color: blue;
+  background-color: #2699fb;
 }
