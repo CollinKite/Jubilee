@@ -1,16 +1,32 @@
 import React from 'react';
-import '../index.css';
+import './login.css'
   
 const login = () => {
   return (
-    <div>
-        <h1>Login</h1>
-        <input type="text" placeholder="Username" />
+    <div id="login">
+        <h1>Welcome Back!</h1>
+        <input id="email" type="text" placeholder="Email" />
+        <br/>
         <input type="password" placeholder="Password" />
-        <button type="submit">Login</button>
-
+        <br/>
+        <button id="submit">Login</button>
+        <br/>
+        <a href="/forgot">Forgot Password?</a>
+        <br/>
+        <a href="/signup">Don't have an account?</a>
     </div>
   );
 };
+
+function auth() {
+  let email = document.getElementById("email").value;
+  let password = document.getElementById("password").value;
+
+  if (email === "" || password === "") {
+    alert("Please fill out all fields.");
+  } else {
+    let xmlhttp = new XMLHttpRequest();
+  }
+}
   
 export default login;
