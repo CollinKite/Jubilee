@@ -7,24 +7,37 @@ import 'react-toastify/dist/ReactToastify.css';
 const loginError = () => toast.error('Error Logging In, please check login details', {
   position: "bottom-center",
   autoClose: 5000,
-  hideProgressBar: false,
+  hideProgressBar: true,
   closeOnClick: true,
   pauseOnHover: true,
   draggable: true,
   progress: undefined,
-  theme: "dark",
+  theme: "light",
   });;
 
-  const emptyError = () => toast.error('Please fill out all fields.', {
-    position: "bottom-center",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "dark",
-    });;
+const emptyError = () => toast.error('Please fill out all fields.', {
+  position: "bottom-center",
+  autoClose: 2000,
+  hideProgressBar: true,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  theme: "light",
+  });;
+
+const loginSuccess = () => toast.success('Login Success', {
+  position: "bottom-center",
+  autoClose: 5000,
+  hideProgressBar: true,
+  closeOnClick: true,
+  pauseOnHover: false,
+  draggable: true,
+  progress: undefined,
+  theme: "light",
+  });
+
+  
 
   
 const login = () => {
@@ -43,7 +56,7 @@ const login = () => {
           <br/>
           <a href="/signup">Don't have an account?</a>
         </div>
-        <ToastContainer/>
+        <ToastContainer limit={1}/>
     </div>
   );
 };
@@ -51,12 +64,27 @@ const login = () => {
 function auth() {
   let email = document.getElementById("email").value;
   let password = document.getElementById("password").value;
+  let authHeaderValue = "Basic " + btoa(email + ":" + password);
 
   if (email === "" || password === "") {
     emptyError();
   } else {
-    let xmlhttp = new XMLHttpRequest();
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", "http://localhost:8080/");
+    xmlHttp.setRequestHeader("Authorization", authHeaderValue);
+    xmlHttp.onreadystatechange = function() {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            console.log("logged in");
+            loginSuccess();
+        }
+        else
+        {
+          console.log("error");
+          loginError();
+        }
+    }
+    xmlHttp.send();    
   }
 }
-  
+
 export default login;
