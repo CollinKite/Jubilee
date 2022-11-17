@@ -1,14 +1,14 @@
 import React from 'react';
+import Logo from '../components/logo';
 import back from '../icons/arrow_back_48dp.svg'
-import logo from '../images/logo512.png'
+
 
 
 
 const Reset = () => {
     return (
         <div id="resetpage">
-            <a href='/' id='logo'><img src={logo} alt="logo"></img></a>
-            <a href='/'><h2 id='logo'>Jubilee</h2></a>
+            <Logo/>
             <div id="card">
                 <a href='/' id='back'><img src={back} alt="back icon"></img></a>
                 <h1>Reset Password</h1>

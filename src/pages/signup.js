@@ -1,18 +1,29 @@
 import React from 'react';
-import './signup.css'
+import Logo from '../components/logo';
+import back from '../icons/arrow_back_48dp.svg'
+import './login.css'
   
 const SignUp = () => {
   return (
     <div>
-      <h1>Sign Up</h1>
-      <form id={"form"} onSubmit={submit}>
-          <input type={"text"} placeholder={"Full Name"} className={"input"}/>
-          <input type={"text"} placeholder={"Email"} className={"input"}/>
-          <input type={"text"} placeholder={"Phone Number"} className={"input"}/>
-          <input type={"password"} placeholder={"Password"} className={"input"}/>
-          <input type={"password"} placeholder={"Confirm Password"} className={"input"}/>
-          <input type={"submit"} className={"submit"}/>
-      </form>
+      <Logo/>
+      <div id="card">
+        <a href='/' id='back'><img src={back} alt="back icon"></img></a>
+        <h1>Sign Up</h1>
+        <form id={"form"} onSubmit={submit}>
+            <input type={"text"} placeholder={"Full Name"} className={"input"}/>
+            <br/>
+            <input type={"text"} placeholder={"Email"} className={"input"}/>
+            <br/>
+            <input type={"text"} placeholder={"Phone Number"} className={"input"}/>
+            <br/>
+            <input type={"password"} placeholder={"Password"} className={"input"}/>
+            <br/>
+            <input type={"password"} placeholder={"Confirm Password"} className={"input"}/>
+            <br/> 
+            <button id="submit" onClick={"submit"}>Login</button>
+        </form>
+      </div>
     </div>
   );
 };

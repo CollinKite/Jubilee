@@ -1,13 +1,13 @@
 import React from 'react';
+import Logo from '../components/logo';
 import './login.css'
-import logo from '../images/logo512.png'
+
 
   
 const login = () => {
   return (
     <div id="loginpage">
-        <a href='/' id='logo'><img src={logo} alt="logo"></img></a>
-        <a href='/'><h2 id='logo'>Jubilee</h2></a>
+      <Logo/>
         <div id="card">
           <h1>Welcome Back!</h1>
           <input id="email" type="text" placeholder="Email" />

@@ -45,11 +45,11 @@ a:link
 
 /* make all text boxes rounded */
 
-#email, #password {
+input {
     border: 1px solid #2699fb;
     border-radius: 5px;
     padding: 5px;
-    width: 100%;
+    width: 75%;
     margin: 5px;
     height: 25px;
 }
@@ -62,7 +62,7 @@ a:link
     margin-left: auto;
     margin-right: auto;
     margin-top: 2%;
-    min-width: 32%;
+    min-width: 100%;
     min-height: 50px;
     color: white;
     font-weight: bold;
@@ -76,6 +76,8 @@ a:link
 
 
 #back {
+  /* top left of card */
     float: left;
-    margin-top: 3%;
+    margin-top: 2%;
+
 }
