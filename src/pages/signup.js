@@ -115,7 +115,14 @@ async function signup() {
       document.getElementById("submit").disabled = false;
     }
   }
-  xmlHttp.send(JSON.stringify({name, email, phone, pass}));    
+  let entry = {
+    "name": name,
+    "email": email,
+    "phone": phone,
+    "password": pass
+  }
+  // xmlHttp.send(JSON.stringify({name, email, phone, pass})); 
+  xmlHttp.send(JSON.stringify(entry));
 }
 
 function sleep(ms) {
