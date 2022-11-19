@@ -41,6 +41,7 @@ const loginSuccess = () => toast.success('Login Success', {
 
   
 const login = () => {
+  
   return (
     <div id="loginpage">
       <Logo/>
@@ -61,29 +62,37 @@ const login = () => {
   );
 };
 
-function auth() {
+async function auth() {
+  document.getElementById("submit").disabled = true;
   let email = document.getElementById("email").value;
   let password = document.getElementById("password").value;
-  let authHeaderValue = "Basic " + btoa(email + ":" + password);
 
   if (email === "" || password === "") {
     emptyError();
   } else {
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("POST", "http://localhost:8080/");
-    xmlHttp.setRequestHeader("Authorization", authHeaderValue);
+    xmlHttp.open("POST", "http://localhost:8080/users/login");
+    xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xmlHttp.onreadystatechange = function() {
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+        if (this.status === 200) {
             console.log("logged in");
+            console.log(this.responseText);
             loginSuccess();
         }
         else
         {
           console.log("error");
+          console.log(this.responseText);
           loginError();
+          document.getElementById("submit").disabled = false;
+          return;
         }
     }
-    xmlHttp.send();    
+    let login = {
+      "email": email,
+      "password": password
+    }
+    xmlHttp.send(JSON.stringify(login));    
   }
 }
 
