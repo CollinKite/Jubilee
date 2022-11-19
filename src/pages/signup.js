@@ -4,6 +4,8 @@ import back from '../icons/arrow_back_48dp.svg'
 import './login.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import bcrypt from 'bcryptjs'
+
 
 const emptyError = () => toast.error('Please fill out all fields', {
   position: "bottom-center",
@@ -171,7 +173,7 @@ async function signup() {
     "name": name,
     "email": email,
     "phone": phone,
-    "password": pass
+    "password": hashPassword(pass)
   }
   // xmlHttp.send(JSON.stringify({name, email, phone, pass})); 
   xmlHttp.send(JSON.stringify(entry));
@@ -194,5 +196,13 @@ function validatePhone(phone)
   var re = /[0-9]{10}/;
   return re.test(phone);
 }
+
+//function to hash password with bcryptjs
+function hashPassword(password){
+  const salt = bcrypt.genSaltSync(10);
+  const hash = bcrypt.hashSync(password, salt);
+  return hash;
+}
+
 
 export default SignUp;
