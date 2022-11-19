@@ -27,31 +27,65 @@ const emptyError = () => toast.error('Please fill out all fields', {
     theme: "light",
     });;
 
-const signUpSuccess = () => toast.success('Sign Up Success', {
-  position: "bottom-center",
-  autoClose: 5000,
-  hideProgressBar: true,
-  closeOnClick: true,
-  pauseOnHover: false,
-  draggable: true,
-  progress: undefined,
-  theme: "light",
-  });
-
-  const signUpError = () => toast.error('Error Communicating with server, please try again later', {
-    position: "bottom-center",
-    autoClose: 5000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "light",
+    
+    const signUpError = () => toast.error('Account With Phone or Email Already Exists!', {
+      position: "bottom-center",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });;
+    
+    const connError = () => toast.error('Can\'t Connect to server, Check Your Connection and Try Again.', {
+      position: "bottom-center",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
     });;
 
-const SignUp = () => {
-  return (
-    <div>
+    const emailError = () => toast.error('Invalid Email, Please Try Again.', {
+      position: "bottom-center",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });;
+
+    const phoneError = () => toast.error('Invalid Phone Number, Please Try Again.', {
+      position: "bottom-center",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });;
+    
+    const signUpSuccess = () => toast.success('Sign Up Success', {
+      position: "bottom-center",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      });
+
+    const SignUp = () => {
+      return (
+        <div>
       <Logo/>
       <div id="card">
         <a href='/' id='back'><img src={back} alt="back icon"></img></a>
@@ -60,7 +94,7 @@ const SignUp = () => {
             <br/>
             <input id="email" type={"text"} placeholder={"Email"} className={"input"}/>
             <br/>
-            <input id="phone" type={"text"} placeholder={"Phone Number"} className={"input"}/>
+            <input id="phone" type={"tel"} placeholder={"Phone Number"} className={"input"} />
             <br/>
             <input id="pass" type={"password"} placeholder={"Password"} className={"input"}/>
             <br/>
@@ -97,6 +131,18 @@ async function signup() {
     return;
   }
 
+  if (!validateEmail(email)){
+    emailError();
+    document.getElementById("submit").disabled = false;
+    return;
+  }
+
+  if(!validatePhone(phone)){
+    phoneError();
+    document.getElementById("submit").disabled = false;
+    return;
+  }
+
   let xmlHttp = new XMLHttpRequest();
   xmlHttp.open("POST", "http://localhost:8080/users/register");
   xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -108,11 +154,17 @@ async function signup() {
           window.location.replace("/");
         });
     }
+    else if (this.status === 401){
+      signUpError();
+      document.getElementById("submit").disabled = false;
+      return;
+    }
     else
     {
       console.log("error");
-      signUpError();
+      connError();
       document.getElementById("submit").disabled = false;
+      return;
     }
   }
   let entry = {
@@ -127,6 +179,20 @@ async function signup() {
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+//regex function to check if email is valid
+function validateEmail(email) 
+{
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+}
+
+//regex function to validate phone number
+function validatePhone(phone)
+{
+  var re = /[0-9]{10}/;
+  return re.test(phone);
 }
 
 export default SignUp;
