@@ -199,8 +199,7 @@ function validatePhone(phone)
 
 //function to hash password with bcryptjs
 function hashPassword(password){
-  const salt = bcrypt.genSaltSync(10);
-  const hash = bcrypt.hashSync(password, salt);
+  const hash = bcrypt.hashSync(password);
   return hash;
 }
 
