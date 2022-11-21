@@ -36,7 +36,6 @@ const loginSuccess = () => toast.success('Login Success', {
   progress: undefined,
   theme: "light",
   });
-
   
 
   
@@ -62,14 +61,31 @@ const login = () => {
   );
 };
 
-async function auth() {
+function disabledLogin()
+{
   document.getElementById("submit").disabled = true;
+  document.getElementById("submit").innerHTML = "Logging In...";
+  document.getElementById("submit").style.backgroundColor = "#e6e6e6";
+  document.getElementById("submit").style.color = "#000000";
+}
+
+function enableLogin(text)
+{
+  document.getElementById("submit").disabled = false;
+  document.getElementById("submit").innerHTML = "Login"; 
+  document.getElementById("submit").style.backgroundColor = "#0088ff";
+  document.getElementById("submit").style.color = "#ffffff";
+}
+
+async function auth() {
+  disabledLogin();
   let email = document.getElementById("email").value;
   let password = document.getElementById("password").value;
 
   if (email === "" || password === "") {
     emptyError();
-    document.getElementById("submit").disabled = false;
+    enableLogin();
+    return;
   } 
   else {
     const reponse = await fetch('http://localhost:8080/users/login', {
@@ -90,7 +106,7 @@ async function auth() {
       setTimeout(function(){ window.location.href = "/home"; }, 2000);
     } else {
       loginError();
-      document.getElementById("submit").disabled = false;
+      enableLogin();
     }
   }
 }

@@ -112,12 +112,12 @@ const emptyError = () => toast.error('Please fill out all fields', {
 
 async function signup() {
   //create array of all input fields
-  document.getElementById("submit").disabled = true;
+  disabledSignUp();
   let inputs = document.getElementsByClassName("input");
   for (let input of inputs){
     if(input.value === ""){
         emptyError();
-        document.getElementById("submit").disabled = false;
+        enableSignUp();
         return;
     }
   } 
@@ -129,19 +129,19 @@ async function signup() {
 
   if (pass !== passConf){
     passError();
-    document.getElementById("submit").disabled = false;
+    enableSignUp();
     return;
   }
 
   if (!validateEmail(email)){
     emailError();
-    document.getElementById("submit").disabled = false;
+    enableSignUp();
     return;
   }
 
   if(!validatePhone(phone)){
     phoneError();
-    document.getElementById("submit").disabled = false;
+    enableSignUp();
     return;
   }
   const reponse = await fetch('http://localhost:8080/users/register', {
@@ -159,12 +159,28 @@ async function signup() {
   }
   else if (data.status === 401) {
     signUpError();
-    document.getElementById("submit").disabled = false;
+    enableSignUp();
   }
    else {
     connError();
-    document.getElementById("submit").disabled = false;
+    enableSignUp();
   }
+}
+
+function disabledSignUp()
+{
+  document.getElementById("submit").disabled = true;
+  document.getElementById("submit").innerHTML = "Signing Up...";
+  document.getElementById("submit").style.backgroundColor = "#e6e6e6";
+  document.getElementById("submit").style.color = "#000000";
+}
+
+function enableSignUp(text)
+{
+  document.getElementById("submit").disabled = false;
+  document.getElementById("submit").innerHTML = "Sign Up"; 
+  document.getElementById("submit").style.backgroundColor = "#0088ff";
+  document.getElementById("submit").style.color = "#ffffff";
 }
 
 //regex function to check if email is valid
