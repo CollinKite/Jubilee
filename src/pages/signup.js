@@ -144,43 +144,27 @@ async function signup() {
     document.getElementById("submit").disabled = false;
     return;
   }
-
-  let xmlHttp = new XMLHttpRequest();
-  xmlHttp.open("POST", "http://localhost:8080/users/register");
-  xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  xmlHttp.onreadystatechange = function() {
-    if (this.status === 200) {
-        console.log("sign up success");
-        signUpSuccess();
-        sleep(2000).then(() => {
-          window.location.replace("/");
-        });
-    }
-    else if (this.status === 401){
-      signUpError();
-      document.getElementById("submit").disabled = false;
-      return;
-    }
-    else
-    {
-      console.log("error");
-      connError();
-      document.getElementById("submit").disabled = false;
-      return;
-    }
+  const reponse = await fetch('http://localhost:8080/users/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({name: name, email: email, phone: phone, password: hashPassword(pass) }),
+  });
+  const data = await reponse;
+  if (data.status === 200) {
+    signUpSuccess();
+    console.log(await data.json());
+    setTimeout(function(){ window.location.href = "/"; }, 2000);
   }
-  let entry = {
-    "name": name,
-    "email": email,
-    "phone": phone,
-    "password": hashPassword(pass)
+  else if (data.status === 401) {
+    signUpError();
+    document.getElementById("submit").disabled = false;
   }
-  // xmlHttp.send(JSON.stringify({name, email, phone, pass})); 
-  xmlHttp.send(JSON.stringify(entry));
-}
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+   else {
+    connError();
+    document.getElementById("submit").disabled = false;
+  }
 }
 
 //regex function to check if email is valid

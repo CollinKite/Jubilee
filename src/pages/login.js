@@ -4,7 +4,7 @@ import './login.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const loginError = () => toast.error('Error Logging In, please check login details', {
+const loginError = () => toast.error('Invalid Login', {
   position: "bottom-center",
   autoClose: 5000,
   hideProgressBar: true,
@@ -69,30 +69,29 @@ async function auth() {
 
   if (email === "" || password === "") {
     emptyError();
-  } else {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("POST", "http://localhost:8080/users/login");
-    xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xmlHttp.onreadystatechange = function() {
-        if (this.status === 200) {
-            console.log("logged in");
-            console.log(this.responseText);
-            loginSuccess();
-        }
-        else
-        {
-          console.log("error");
-          console.log(this.responseText);
-          loginError();
-          document.getElementById("submit").disabled = false;
-          return;
-        }
+    document.getElementById("submit").disabled = false;
+  } 
+  else {
+    const reponse = await fetch('http://localhost:8080/users/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: email
+      , password: password }),
+    });
+    const data = await reponse;
+    if (data.status === 200) {
+      loginSuccess();
+      //print the token from the response
+      let token = (await data.json()).token;
+      localStorage.setItem('token', token);
+      console.log(localStorage.getItem('token'));
+      setTimeout(function(){ window.location.href = "/home"; }, 2000);
+    } else {
+      loginError();
+      document.getElementById("submit").disabled = false;
     }
-    let login = {
-      "email": email,
-      "password": password
-    }
-    xmlHttp.send(JSON.stringify(login));    
   }
 }
 
