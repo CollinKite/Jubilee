@@ -4,38 +4,27 @@ import './login.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const loginError = () => toast.error('Invalid Login', {
-  position: "bottom-center",
-  autoClose: 5000,
-  hideProgressBar: true,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  theme: "light",
-  });;
-
-const emptyError = () => toast.error('Please fill out all fields.', {
-  position: "bottom-center",
-  autoClose: 2000,
-  hideProgressBar: true,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  theme: "light",
-  });;
-
-const loginSuccess = () => toast.success('Login Success', {
-  position: "bottom-center",
-  autoClose: 5000,
-  hideProgressBar: true,
-  closeOnClick: true,
-  pauseOnHover: false,
-  draggable: true,
-  progress: undefined,
-  theme: "light",
-  });
+function toastMsg(message, boolSuccess)
+{
+  const props = {
+    position: "bottom-center",
+    autoClose: 5000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: false,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  }
+  if (boolSuccess)
+  {
+    toast.success(message, props);
+  }
+  else
+  {
+    toast.error(message, props);
+  }
+}
   
 
   
@@ -83,7 +72,7 @@ async function auth() {
   let password = document.getElementById("password").value;
 
   if (email === "" || password === "") {
-    emptyError();
+    toastMsg("Please fill out all fields", false);
     enableLogin();
     return;
   } 
@@ -98,14 +87,14 @@ async function auth() {
     });
     const data = await reponse;
     if (data.status === 200) {
-      loginSuccess();
+      toastMsg("Login Successful", true);
       //print the token from the response
       let token = (await data.json()).token;
       localStorage.setItem('token', token);
       console.log(localStorage.getItem('token'));
       setTimeout(function(){ window.location.href = "/home"; }, 2000);
     } else {
-      loginError();
+      toastMsg("Invalid Credentials", false);
       enableLogin();
     }
   }

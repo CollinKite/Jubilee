@@ -7,83 +7,27 @@ import 'react-toastify/dist/ReactToastify.css';
 import bcrypt from 'bcryptjs'
 
 
-const emptyError = () => toast.error('Please fill out all fields', {
-  position: "bottom-center",
-  autoClose: 2000,
-  hideProgressBar: true,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  theme: "light",
-  });;
-
-  const passError = () => toast.error('Passwords Don\'t Match', {
+function toastMsg(message, boolSuccess)
+{
+  const props = {
     position: "bottom-center",
-    autoClose: 2000,
+    autoClose: 5000,
     hideProgressBar: true,
     closeOnClick: true,
-    pauseOnHover: true,
+    pauseOnHover: false,
     draggable: true,
     progress: undefined,
     theme: "light",
-    });;
-
-    
-    const signUpError = () => toast.error('Account With Phone or Email Already Exists!', {
-      position: "bottom-center",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });;
-    
-    const connError = () => toast.error('Can\'t Connect to server, Check Your Connection and Try Again.', {
-      position: "bottom-center",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });;
-
-    const emailError = () => toast.error('Invalid Email, Please Try Again.', {
-      position: "bottom-center",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });;
-
-    const phoneError = () => toast.error('Invalid Phone Number, Please Try Again.', {
-      position: "bottom-center",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });;
-    
-    const signUpSuccess = () => toast.success('Sign Up Success', {
-      position: "bottom-center",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      });
+  }
+  if (boolSuccess)
+  {
+    toast.success(message, props);
+  }
+  else
+  {
+    toast.error(message, props);
+  }
+}
 
     const SignUp = () => {
       return (
@@ -116,9 +60,9 @@ async function signup() {
   let inputs = document.getElementsByClassName("input");
   for (let input of inputs){
     if(input.value === ""){
-        emptyError();
-        enableSignUp();
-        return;
+      toastMsg("Please fill out all fields", false);
+      enableSignUp();
+      return;
     }
   } 
   let name = document.getElementById("name").value;
@@ -128,19 +72,19 @@ async function signup() {
   let passConf = document.getElementById("passConf").value;
 
   if (pass !== passConf){
-    passError();
+    toastMsg("Passwords do not match", false);
     enableSignUp();
     return;
   }
 
   if (!validateEmail(email)){
-    emailError();
+    toastMsg("Please enter a valid email", false);
     enableSignUp();
     return;
   }
 
   if(!validatePhone(phone)){
-    phoneError();
+    toastMsg("Please enter a valid phone number", false);
     enableSignUp();
     return;
   }
@@ -153,16 +97,16 @@ async function signup() {
   });
   const data = await reponse;
   if (data.status === 200) {
-    signUpSuccess();
+    toastMsg("Account created successfully", true);
     console.log(await data.json());
     setTimeout(function(){ window.location.href = "/"; }, 2000);
   }
   else if (data.status === 401) {
-    signUpError();
+    toastMsg("Email/Phone already in use", false);
     enableSignUp();
   }
    else {
-    connError();
+    toastMsg("Error communicating with server", false);
     enableSignUp();
   }
 }
