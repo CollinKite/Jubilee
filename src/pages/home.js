@@ -7,7 +7,7 @@ import { getActiveElement } from '@testing-library/user-event/dist/utils';
 import arrow from '../images/arrow.png'
 import remove from '../images/delete.png'
 
-
+//this code can be replaced with better token authorization
 function loadToken()
 {
     var token = localStorage.getItem("token");
@@ -25,6 +25,7 @@ function loadToken()
 
 loadToken()
 
+//somehow broke this
 function logout()
 {
     localStorage.removeItem('token');
@@ -35,6 +36,7 @@ function logout()
 const Home = () => {
     const [loading, setLoading] = useState(true)
 
+    //just an example I was using for testing
     let task = {
         taskId: 1,
         taskName: "Task 1",
@@ -179,6 +181,7 @@ const Home = () => {
 export default Home;
 
 async function findUser() {
+    //Was having and issue connecting to api earlier so I was testing things with this
     let info = loadToken();
     const res = await fetch('http://localhost:8080/users/test@email.com')
     const data = await res.json()
