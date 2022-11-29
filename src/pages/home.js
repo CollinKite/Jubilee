@@ -91,8 +91,6 @@ const Home = () => {
             setLoading(false)
           }
         }
-    
-        loaded = true
     return (
         <>
             {loading === false ? (
@@ -179,6 +177,8 @@ const Home = () => {
 // }
 
 export default Home;
+
+findUser()
 
 async function findUser() {
     //Was having and issue connecting to api earlier so I was testing things with this
