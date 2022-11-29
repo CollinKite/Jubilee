@@ -1,8 +1,184 @@
 .sidebar{
-	position: fixed;
-    top: 0;
-    left: 0;
-	width: 300px;
-	height: 100%;
-	background: #000000e0;
+	width: 250px;
+	min-height: 100%;
+	background: #171819e0;
+	z-index: 2;
+	box-shadow: 2px 2px 2px #1e1e1e;
+	
+}
+
+.infobar{
+	width: 350px;
+	min-height: 100%;
+	background: #171819e0;
+	z-index: 2;
+	box-shadow: 2px 2px 2px 4px #1e1e1e;
+}
+
+@media (max-width: 46em) {
+	.sidebar {
+		width: 200px;
+		min-height: 100%;
+		background: #171717e0;
+		z-index: 2;
+		position: absolute;
+	}
+	}
+.container{
+	position: absolute;
+	min-width: 100%;
+	min-height: 100%;
+	background-color: #272B32;
+	color:white;
+	display: flex;
+	justify-content:space-between ;
+	align-content: stretch;
+}
+
+li {
+	list-style-type: none;
+}
+
+.info {
+    line-height: 50px;
+	border: black solid 1px;
+	border-radius: 5px;
+	max-width: 100%;
+	height: 50px;
+	padding-left: 10px;
+	background: #1e1e1e;
+	cursor: pointer;
+}
+
+.newTask {
+	line-height: 38px;
+    font-size: medium;
+	border: 0;
+	border-radius: 3px;
+	min-width: 93%;
+	height: 38px;
+	padding-left: 10px;
+	background: #1e1e1e;
+	color: white;
+	margin: 0;
+	bottom: 0;
+}
+
+.submit{
+    font-size: medium;
+	border: solid 1px grey;
+	border-radius: 3px;
+	min-width: 5%;
+	height: 46px;
+	padding-left: 10px;
+	background: #1e1e1e;
+	color: white;
+	margin: 0;
+	cursor: pointer;
+	
+}
+
+.taskName {
+	float: left;
+    font-weight: 300;
+	padding-left: 0;
+	margin-left: 0;
+	font-size: medium;
+}
+
+.lists {
+	flex-grow: 4;
+	margin-right: 20px;
+	margin-left: 0;
+}
+
+.hidden {
+	visibility: hidden;
+	position: absolute;
+}
+
+.menu {
+	height: 15px;
+	width: 15px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 3;
+	border-width: 0;
+}
+.infoMenu {
+
+	height: 15px;
+	width: 15px;
+	right: 0;
+	bottom: 0;
+	z-index: 3;
+	border-width: 0;
+
+}
+.infoDelete{
+
+	height: 15px;
+	width: 15px;
+	float: left;
+	bottom: 0;
+	z-index: 3;
+	border-width: 0;
+}
+.infoBox {
+	background-color: #1e1e1e;
+	width: 250px;
+	padding: 10px;
+}
+.name {
+	border: none;
+	border-radius: 0;
+	outline: none;
+	background-color:#202122;
+	color: white;
+	font-size: larger;
+	height: 30px;
+	margin-top: 25px;
+	margin-left: 0px;
+	width: 240px;
+}
+.createDate{
+	margin: auto;
+	display: inline-block;
+	bottom: 0;
+}
+
+.header{
+	display: flex;
+	justify-content: space-between;
+	bottom: 0;
+	box-shadow: 0px 2px 2px -2px #686870;
+}
+
+.description{
+	margin-top: 30px;
+	height: 200px;
+	width: 250px;
+	background-color: #202122;
+	color: white;
+	resize: none;
+}
+.description::placeholder{
+	font-size: larger;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.options{
+	border-bottom: solid 2px #1e1e1e;
+	padding-bottom: 10px;
+}
+.groupEdit{
+	background-color: #202122;
+	border: none;
+	width: 130px;
+	margin-left: 36px;
+	color: white;
+}
+
+.groupLink {
+	cursor: pointer;
 }
