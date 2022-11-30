@@ -11,6 +11,10 @@ import remove from '../images/delete.png'
 function loadToken()
 {
     var token = localStorage.getItem("token");
+
+    console.log(token)
+
+    if(token !== null){
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
@@ -20,10 +24,10 @@ function loadToken()
     let obj = JSON.parse(jsonPayload)
     let info = [obj.email, obj.userId]
 
+
     return(info)
 }
-
-loadToken()
+}
 
 //somehow broke this
 function logout()
@@ -183,7 +187,7 @@ findUser()
 async function findUser() {
     //Was having and issue connecting to api earlier so I was testing things with this
     let info = loadToken();
-    const res = await fetch('http://localhost:8080/users/test@email.com')
+    const res = await fetch(`http://localhost:8080/users/${info[0]}`)
     const data = await res.json()
     console.log(data)
     return fetch(`http://localhost:8000/users/${info[0]}`)
