@@ -105,7 +105,7 @@ async function signup() {
     toastMsg("Email/Phone already in use", false);
     enableSignUp();
   }
-   else {
+  else {
     toastMsg("Error communicating with server", false);
     enableSignUp();
   }

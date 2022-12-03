@@ -5,14 +5,16 @@ import back from '../icons/arrow_back_48dp.svg'
 
 
 
-const Reset = () => {
+const Reset_Password = () => {
     return (
-        <div id="resetpage">
+        <div id="resetPasswordpage">
             <Logo/>
             <div id="card">
                 <a href='/' id='back'><img src={back} alt="back icon"></img></a>
                 <h1>Reset Password</h1>
-                <input id="email" type="text" placeholder="Email" />
+                <input id="password" type="text" placeholder="Password" />
+                <br/>
+                <input id="confirm_password" type="text" placeholder="Confirm Password" />
                 <br/>
                 <button id="submit">Reset</button>
             </div>
@@ -20,4 +22,4 @@ const Reset = () => {
     );
 };
 
-    export default Reset;
+    export default Reset_Password;
