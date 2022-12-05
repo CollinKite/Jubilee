@@ -53,22 +53,24 @@ li {
 .newTask {
 	line-height: 38px;
     font-size: medium;
-	border: 0;
 	border-radius: 3px;
-	min-width: 93%;
+	min-width: 85%;
 	height: 38px;
 	padding-left: 10px;
 	background: #1e1e1e;
 	color: white;
 	margin: 0;
 	bottom: 0;
+	flex-shrink: initial;
+	border: 0;
+	border-radius: 3px;
 }
 
 .submit{
     font-size: medium;
 	border: solid 1px grey;
 	border-radius: 3px;
-	min-width: 5%;
+	min-width: 70px;
 	height: 46px;
 	padding-left: 10px;
 	background: #1e1e1e;
@@ -76,6 +78,16 @@ li {
 	margin: 0;
 	cursor: pointer;
 	
+}
+
+.submitBox{
+	display: flex;
+	justify-content: space-between;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #1e1e1e;
+	max-width: 100%;
+	border-radius: 3px;
 }
 
 .taskName {
@@ -181,4 +193,20 @@ li {
 
 .groupLink {
 	cursor: pointer;
+	border: solid black 1px;
+	border-radius: 3px;
+	background-color: #272B32;
+	width: 130px;
+	display: flex;
+	justify-content: center;
+	padding: 7px 0;
+	
+}
+
+.title {
+	height: 50px;
+	font-size: xx-large;
+	padding-left: 30px;
+	padding-top: 20px;
+	border-bottom: solid 1px #686870;
 }

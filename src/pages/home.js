@@ -7,6 +7,11 @@ import { getActiveElement } from '@testing-library/user-event/dist/utils';
 import arrow from '../images/arrow.png'
 import remove from '../images/delete.png'
 
+var taskCounter
+loadTaskCounter()
+var currentGroup = "Home"
+var taskContainer = []
+
 const Home = () => {
    
     return (
@@ -15,22 +20,25 @@ const Home = () => {
                     <input type={"image"} src={require('../images/menu-icon.png')} className="menu" onClick={() => menuVisiblity("sidebar")}/>
 
                     <div className='sidebar' id='sidebar'>
+                        <div id='sidebar'>
                         <ul className='options'>
                             <br/>
-                            <li><a href="/home" onClick={logout}>Logout</a></li>
+                            <li><a href="/login" onClick={logout}>Logout</a></li>
                         </ul>
-                        <ul className='groups'>
+                        <ul className='groups' id ="groups">
                             <br/>
                             <li><div className='groupLink'>Home</div></li>
                         </ul>
-                        <input type={"text"} placeholder="Enter New Group" className='groupEdit'/>
+                        </div>
+                        <input type={"text"} placeholder="Enter New Group" className='groupEdit' id='newGroup' onBlur={() => {createGroup()}}/>
                     </div> 
                     <div className='lists'>
-                        <ul id = "listHolder" onLoad={GetTasks}>
+                        <div className='title' id = 'title'>Home</div>
+                        <ul id = "listHolder" onLoad={() => {GetTasks(currentGroup)}}>
                             <li></li>
                         </ul>
                     </div>
-                    <div className='infobar' id="infobar"> </div> 
+                    <div id="infobar"> </div> 
                 </div>
         </>
     );
@@ -57,12 +65,95 @@ function loadToken()
 }
 }
 
-//somehow broke this
-function logout()
-{
-    localStorage.removeItem('token');
-    window.location.replace = "/login";
+async function loadTaskCounter() {
+    await findUser().then(response => taskCounter = response.result.taskCounter)
+
 }
+
+async function saveTaskCounter() {
+    var userId = loadToken()
+
+    const reponse = await fetch(`http://localhost:8080/users/${userId[1]}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({userId: userId, value: taskCounter, key: "taskCounter"}),
+      });
+
+}
+
+async function saveTaskGroups() {
+    var userId = loadToken()
+
+    const reponse = await fetch(`http://localhost:8080/users/${userId[1]}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({userId: userId, value: taskContainer, key: "taskGroups"}),
+      });
+
+}
+
+async function createGroup() {
+    var newGroup = document.getElementById("newGroup").value
+    currentGroup = newGroup
+    
+    loadGroups(currentGroup)
+    GetTasks(currentGroup)
+}
+
+loadGroups()
+console.log("loading groups")
+async function loadGroups(value) {
+    await findUser().then(response => taskContainer = response.result.taskGroups)
+
+    if(value != undefined){
+        taskContainer.push(value)
+    }
+
+   let groups = document.getElementById("groups")
+   groups.innerHTML = `<br/>
+   <li><div class='groupLink' id='home'>Home</div></li>`
+
+   taskContainer.forEach(element => {
+    groups.innerHTML += `<br/>
+    <li><div class='groupLink'>${element}</div></li>`
+   });
+
+   let elements = document.querySelectorAll('.groupLink');
+
+   for(let i = 0; i < elements.length; i++){
+    elements[i].addEventListener('click', function() {currentSetter(elements[i].innerHTML)})
+   }
+
+//    document.getElementById('home').addEventListener('click', function() {currentSetter(undefined)})
+
+
+
+saveTaskGroups()
+GetTasks(currentGroup)
+}
+
+function currentSetter(value) {
+    currentGroup = value
+    GetTasks(currentGroup)
+}
+
+//somehow broke this
+async function logout()
+{
+    await saveTaskCounter()
+    await saveTaskGroups()
+
+    localStorage.removeItem('token');
+    window.location.href = '/login'
+    
+    return false
+    
+}
+
 
 function menuVisiblity(id) {
 
@@ -71,11 +162,13 @@ function menuVisiblity(id) {
 }
 
 function infoBar(item) {
+    GetTasks(currentGroup)
 
     let task = item
 
     var info = document.getElementById("infobar")
     info.classList.remove("hidden")
+    info.classList.add("infobar")
     info.innerHTML = `<div class="header"> \
     <input type="image" src="${arrow}" class="infoMenu" id="exit"/> \
     <div class="createDate">Created: ${task.createDate}</div> \
@@ -84,40 +177,106 @@ function infoBar(item) {
         <ul> \
         <li><input type="text" class="name" id="name"/></li> \
         <li><input type="text" class="name" id="date" placeholder="Enter Due Date"/></li> \
-        <li><textarea class="description" placeholder="Enter task Description" value = "what">${task.taskDescription}</textarea></li> \
+        <li><textarea class="description" placeholder="Enter task Description" id="desc">${task.taskDescription}</textarea></li> \
         </ul>`
 
     document.getElementById("exit").addEventListener("click", function() {menuVisiblity("infobar")}, false)
-    document.getElementById("trash").addEventListener("click", function() {menuVisiblity("infobar")}, false)
+    document.getElementById("trash").addEventListener("click", function() {deleteTask(task.taskId)}, false)
     document.getElementById("name").setAttribute("value", task.taskName)
     document.getElementById("date").setAttribute("value", task.dueDate)
+    document.getElementById('name').addEventListener('blur', function() {updateInfo(task, "name")})
+    document.getElementById('date').addEventListener('input', function() {updateInfo(task, "date")})
+    document.getElementById('desc').addEventListener('input', function() {updateInfo(task, "desc")})
     
 }
 
-function saveTask() {
-    console.log('stuff')
+function updateInfo(task, id){
+    var task = task
+    var updatedTask
+
+switch(id){
+    case "name":
+        var name = document.getElementById("name").value
+        updatedTask = {
+        taskId: task.taskId,
+        taskName: name,
+        taskDescription: task.taskDescription,
+        taskType: task.taskType,
+        createDate: task.createDate,
+        dueDate: task.dueDate,
+        completed: task.completed
+        }
+        updateTask(updatedTask);
+        document.getElementById(`${task.taskId}name`).innerHTML = name;
+        break;
+    case "date":
+        var date = document.getElementById("date").value
+        updatedTask = {
+        taskId: task.taskId,
+        taskName: task.taskName,
+        taskDescription: task.taskDescription,
+        taskType: task.taskType,
+        createDate: task.createDate,
+        dueDate: date,
+        completed: task.completed
+        }
+        updateTask(updatedTask);
+        break;
+    case "desc":
+        var desc = document.getElementById("desc").value
+        updatedTask = {
+        taskId: task.taskId,
+        taskName: task.taskName,
+        taskDescription: desc,
+        taskType: task.taskType,
+        createDate: task.createDate,
+        dueDate: task.dueDate,
+        completed: task.completed
+        }
+        updateTask(updatedTask);
+        
+        break;
+        
+}
+GetTasks(currentGroup);
+
 }
 
-GetTasks()
-async function GetTasks() {
+GetTasks("Home")
+async function GetTasks(group) {
 
+    var group = group
     var tasks
+    var filtered
     await findUser().then(response => tasks = response.result.tasks)
+    filtered = tasks
+
+    console.log(group, "group")
+
+    if(group != "Home"){
+        filtered = []
+        for(let i = 0; i< tasks.length; i++){
+            if(tasks[i].taskType == group){
+                filtered.push(tasks[i])
+            }
+        }
+    }
+
+    console.log(filtered, "filtered")
   
     let container = document.getElementById("listHolder")
-
     container.innerHTML = `<li>
-    <div className='submitBox'>
-        <input type="text" placeholder="Enter New Task" class='newTask'/>
+    <div class='submitBox'>
+        <input type="text" placeholder="Enter New Task" class='newTask' id ='newTask'/>
         <button class='submit' id="sbmtbtn">Add</button>
     </div>
     <br/>
     </li>`
     
-    tasks.forEach(element => {
+    filtered.forEach(element => {
         container.innerHTML +=`<li class='li' >
     <div class='info' id='${element.taskId}Info' >
-        <div class='taskName'>
+        <div class='taskName' id='${element.taskId}name'>
             ${element.taskName}
         </div>
     </div>
@@ -126,8 +285,11 @@ async function GetTasks() {
 
     });
 
-    document.getElementById("sbmtbtn").addEventListener("click", function(){saveTask()}, false)
+    document.getElementById("sbmtbtn").addEventListener("click", function(){createTask()}, false)
     let elements = document.querySelectorAll('.info');
+
+    document.getElementById("title").innerHTML = currentGroup
+    
 
    for(let i = 0; i < elements.length; i++){
     elements[i].addEventListener('click', function() {infoBar(tasks[i])})
@@ -144,6 +306,73 @@ async function findUser() {
         return data
     })
     .catch(error => console.log(error))
+}
+
+async function updateTask(task){
+
+    var token = loadToken()
+
+    const reponse = await fetch('http://localhost:8080/tasks', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token[1]}`
+      },
+      body: JSON.stringify(task),
+    });
+}
+
+async function deleteTask(id) {
+    var token = loadToken()
+
+    const reponse = await fetch('http://localhost:8080/tasks', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token[1]}`
+      },
+      body: JSON.stringify({taskId: id}),
+    });
+
+    GetTasks(currentGroup)
+
+}
+
+async function createTask() {
+    var token = loadToken()
+    var name = document.getElementById('newTask').value
+
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+
+    today = mm + '/' + dd + '/' + yyyy;
+
+    var task = {
+        taskId: taskCounter,
+        taskName: name,
+        taskDescription: "",
+        taskType: currentGroup,
+        createDate: today,
+        dueDate: "",
+        completed: false
+    }
+
+    const reponse = await fetch('http://localhost:8080/tasks', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token[1]}`
+      },
+      body: JSON.stringify(task),
+    });
+
+    taskCounter ++;
+    console.log(taskCounter)
+
+    GetTasks(currentGroup)
+
 }
 
 export default Home;
