@@ -53,6 +53,7 @@ const Forgot_Password = () => {
     console.log("reched")
     return (
         <div id="resetpage">
+            <ToastContainer limit={1}/>
             <Logo/>
             <div id="card">
                 <a href='/' id='back'><img src={back} alt="back icon"></img></a>
@@ -61,7 +62,6 @@ const Forgot_Password = () => {
                 <br/>
                 <button id="submit" onClick={sendResetEmail}>Reset</button>
             </div>
-            <ToastContainer limit={1}/>
         </div>
     );
 };
