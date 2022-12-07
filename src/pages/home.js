@@ -14,6 +14,7 @@ const Home = () => {
     return (
         <>
                 <div className='container'>
+                    {checkfortoken()}
                     <input type={"image"} src={require('../images/menu-icon.png')} className="menu" onClick={() => menuVisiblity("sidebar")}/>
 
                     <div className='sidebar' id='sidebar'>
@@ -43,6 +44,15 @@ const Home = () => {
         </>
     );
 
+}
+
+function checkfortoken()
+{
+    var token = localStorage.getItem("token");
+
+    if(token === null){
+        window.location.href = "/login"
+    }
 }
 
 //this code can be replaced with better token authorization
