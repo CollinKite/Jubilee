@@ -82,7 +82,7 @@ const rstPwd = async (req, res) =>
 
 }
 
-const Reset_Password = () => {
+const ResetPassword = () => {
     return (
         <div id="resetPasswordpage">
             <ToastContainer limit={1}/>
@@ -100,4 +100,4 @@ const Reset_Password = () => {
     );
 };
 
-    export default Reset_Password;
+    export default ResetPassword;

@@ -49,7 +49,7 @@ const sendResetEmail = async () =>
     }
 }
 
-const Forgot_Password = () => {
+const ForgotPassword = () => {
     console.log("reched")
     return (
         <div id="resetpage">
@@ -66,4 +66,4 @@ const Forgot_Password = () => {
     );
 };
 
-    export default Forgot_Password;
+    export default ForgotPassword;
