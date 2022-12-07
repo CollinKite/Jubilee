@@ -40,6 +40,20 @@ const rstPwd = async (req, res) =>
     let urlparams = new URLSearchParams(window.location.search);
     let token = urlparams.get("token");
 
+    
+        var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    let obj = JSON.parse(jsonPayload)
+    let info = [obj.email, obj.userId]
+
+    console.log(info);
+    
+    
+
     if(pass !== comfPass)
     {
         toastMsg("Passwords do not match", false)
@@ -49,10 +63,10 @@ const rstPwd = async (req, res) =>
     const reponse = await fetch('http://localhost:8080/users/reset-password', {
     method: 'Post',
     headers: {
-        //'Authorization':,
+        'Authorization': `Bearer ${info[0]}`,
         'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ password: hashPassword(pass) }),
+    body: JSON.stringify({token: token, password: hashPassword(pass) }),
     });
     const data = await reponse;
     if (data.status === 200) {
