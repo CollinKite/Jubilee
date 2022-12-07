@@ -18,3 +18,8 @@
     position: fixed;
     background-color: white;
 }
+
+.taskStatus{
+  font-size: larger;
+  margin-left: 75px;
+}

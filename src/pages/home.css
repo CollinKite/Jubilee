@@ -209,4 +209,25 @@ li {
 	padding-left: 30px;
 	padding-top: 20px;
 	border-bottom: solid 1px #686870;
+	width: 90%;
+}
+
+.deleteGroup {
+height: 30px;
+width: 30px;
+border: none;
+padding-top: 27px;
+}
+
+.headerContainer{
+	display: flex;
+}
+
+.submitButton {
+	margin-top: 15px;
+	width: 260px;
+	height: 50px;
+	background-color:#272B32;
+	color: white;
+	cursor: pointer;
 }

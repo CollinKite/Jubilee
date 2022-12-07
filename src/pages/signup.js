@@ -137,7 +137,7 @@ function validateEmail(email)
 //regex function to validate phone number
 function validatePhone(phone)
 {
-  var re = /[0-9]{10}/;
+  var re = /^\d{10}$/;
   return re.test(phone);
 }
 
