@@ -7,6 +7,6 @@ const LoadingScreen = () => {
             <div className="loading"></div>
         </div>
     );
- }
+}
 
 export default LoadingScreen;
