@@ -23,17 +23,20 @@ const Home = () => {
                         <div id='sidebar'>
                         <ul className='options'>
                             <br/>
-                            <li><a href="/login" onClick={logout}>Logout</a></li>
+                            <li><a href="#" onClick={logout}>Logout</a></li>
                         </ul>
                         <ul className='groups' id ="groups">
                             <br/>
                             <li><div className='groupLink'>Home</div></li>
                         </ul>
                         </div>
-                        <input type={"text"} placeholder="Enter New Group" className='groupEdit' id='newGroup' onBlur={() => {createGroup()}}/>
+                        <input type={"text"} placeholder="Enter New Group" className='groupEdit' id='newGroup' onKeyPress={createGroup}/>
                     </div> 
                     <div className='lists'>
+                        <div className='headerContainer' id='headerContainer'>
                         <div className='title' id = 'title'>Home</div>
+                        <input type={'image'} src={remove} className="deleteGroup" id="deleteGroup" onClick={() => deleteGroup()}/>
+                        </div>
                         <ul id = "listHolder" onLoad={() => {GetTasks(currentGroup)}}>
                             <li></li>
                         </ul>
@@ -96,16 +99,50 @@ async function saveTaskGroups() {
 
 }
 
-async function createGroup() {
-    var newGroup = document.getElementById("newGroup").value
-    currentGroup = newGroup
+async function createGroup(event) {
+
+    if(event.key === "Enter"){
+
+    var newGroup = await document.getElementById("newGroup").value
+    currentGroup = await newGroup
     
+    document.getElementById("newGroup").value = ""
     loadGroups(currentGroup)
     GetTasks(currentGroup)
+    }
+}
+
+async function deleteGroup(){
+    var groups
+    var filtered = []
+    await findUser().then(response => groups = response.result.taskGroups)
+
+    groups.forEach(element => {
+        if(element != currentGroup){
+            filtered.push(element)
+        }
+    });
+
+    var token = loadToken()
+
+    const reponse = await fetch(`http://localhost:8080/users/${token[1]}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({key: "taskGroups", value: filtered}),
+    });
+
+    document.getElementById("infobar").classList.toggle('hidden')
+
+    currentGroup = "Home"
+    
+    loadGroups()
+    GetTasks(currentGroup)
+
 }
 
 loadGroups()
-console.log("loading groups")
 async function loadGroups(value) {
     await findUser().then(response => taskContainer = response.result.taskGroups)
 
@@ -121,19 +158,25 @@ async function loadGroups(value) {
     groups.innerHTML += `<br/>
     <li><div class='groupLink'>${element}</div></li>`
    });
-
+ 
    let elements = document.querySelectorAll('.groupLink');
 
    for(let i = 0; i < elements.length; i++){
     elements[i].addEventListener('click', function() {currentSetter(elements[i].innerHTML)})
    }
 
-//    document.getElementById('home').addEventListener('click', function() {currentSetter(undefined)})
-
-
-
 saveTaskGroups()
 GetTasks(currentGroup)
+}
+
+async function loadHeader() {
+    let header = document.getElementById("headerContainer")
+    header.innerHTML = `<div class='title' id = 'title'>${currentGroup}</div>`
+
+   if(currentGroup != "Home"){
+    header.innerHTML += `<input type='image' src="${remove}" class="deleteGroup" id="deleteGroup"/>`
+    document.getElementById("deleteGroup").addEventListener('click', function(){deleteGroup()})
+   }
 }
 
 function currentSetter(value) {
@@ -154,7 +197,6 @@ async function logout()
     
 }
 
-
 function menuVisiblity(id) {
 
     var menu = document.getElementById(id)
@@ -162,9 +204,14 @@ function menuVisiblity(id) {
 }
 
 function infoBar(item) {
-    GetTasks(currentGroup)
-
     let task = item
+    var completion
+    if(task.completed == true){
+        completion = "Completed"
+    }
+    else{
+        completion = "In Progress"
+    }
 
     var info = document.getElementById("infobar")
     info.classList.remove("hidden")
@@ -175,26 +222,34 @@ function infoBar(item) {
     <input type="image" src="${remove}" class="infoDelete" id="trash"/> \
     </div> \
         <ul> \
+        <li><div id = "taskStatus" class="taskStatus">${completion}</li> \
         <li><input type="text" class="name" id="name"/></li> \
         <li><input type="text" class="name" id="date" placeholder="Enter Due Date"/></li> \
         <li><textarea class="description" placeholder="Enter task Description" id="desc">${task.taskDescription}</textarea></li> \
+        <li><button class = "submitButton" id="submitButton">${completion}</button></li> \
         </ul>`
 
     document.getElementById("exit").addEventListener("click", function() {menuVisiblity("infobar")}, false)
     document.getElementById("trash").addEventListener("click", function() {deleteTask(task.taskId)}, false)
     document.getElementById("name").setAttribute("value", task.taskName)
     document.getElementById("date").setAttribute("value", task.dueDate)
-    document.getElementById('name').addEventListener('blur', function() {updateInfo(task, "name")})
-    document.getElementById('date').addEventListener('input', function() {updateInfo(task, "date")})
-    document.getElementById('desc').addEventListener('input', function() {updateInfo(task, "desc")})
+    document.getElementById('name').addEventListener('keypress', function(event) {updateInfo(event.key, task, "name")})
+    document.getElementById('date').addEventListener('keypress', function(event) {updateInfo(event.key, task, "date")})
+    document.getElementById('desc').addEventListener('keypress', function(event) {updateInfo(event.key, task, "desc")})
+    document.getElementById("submitButton").addEventListener("click", function() {updateInfo("Enter", task, "completion")})
+
+    document.getElementById('name').addEventListener('blur', function() {updateInfo("Enter", task, "name")})
+    document.getElementById('date').addEventListener('blur', function() {updateInfo("Enter", task, "date")})
+    document.getElementById('desc').addEventListener('blur', function() {updateInfo("Enter", task, "desc")})
     
 }
 
-function updateInfo(task, id){
+async function updateInfo(e, task, id){
+    if(e === "Enter"){
     var task = task
     var updatedTask
 
-switch(id){
+    switch(id){
     case "name":
         var name = document.getElementById("name").value
         updatedTask = {
@@ -206,7 +261,7 @@ switch(id){
         dueDate: task.dueDate,
         completed: task.completed
         }
-        updateTask(updatedTask);
+        await updateTask(updatedTask);
         document.getElementById(`${task.taskId}name`).innerHTML = name;
         break;
     case "date":
@@ -220,7 +275,7 @@ switch(id){
         dueDate: date,
         completed: task.completed
         }
-        updateTask(updatedTask);
+        await updateTask(updatedTask);
         break;
     case "desc":
         var desc = document.getElementById("desc").value
@@ -233,25 +288,47 @@ switch(id){
         dueDate: task.dueDate,
         completed: task.completed
         }
-        updateTask(updatedTask);
+        await updateTask(updatedTask);
         
         break;
+    case "completion":
+        var updated
+        if(task.completed == true){
+            updated = false
+        }else{
+            updated = true
+        }
         
+        updatedTask = {
+            taskId: task.taskId,
+            taskName: task.taskName,
+            taskDescription: task.taskDescription,
+            taskType: task.taskType,
+            createDate: task.createDate,
+            dueDate: task.dueDate,
+            completed: updated
+            }
+            await updateTask(updatedTask);
+            
+           
+        
+            break;
 }
+infoBar(updatedTask)
 GetTasks(currentGroup);
+}
 
 }
 
 GetTasks("Home")
 async function GetTasks(group) {
+    loadHeader()
 
     var group = group
     var tasks
     var filtered
     await findUser().then(response => tasks = response.result.tasks)
     filtered = tasks
-
-    console.log(group, "group")
 
     if(group != "Home"){
         filtered = []
@@ -261,8 +338,6 @@ async function GetTasks(group) {
             }
         }
     }
-
-    console.log(filtered, "filtered")
   
     let container = document.getElementById("listHolder")
     container.innerHTML = `<li>
@@ -334,6 +409,8 @@ async function deleteTask(id) {
       body: JSON.stringify({taskId: id}),
     });
 
+    document.getElementById("infobar").classList.add('hidden')
+
     GetTasks(currentGroup)
 
 }
@@ -370,9 +447,8 @@ async function createTask() {
 
     taskCounter ++;
     console.log(taskCounter)
-
+    await saveTaskCounter()
     GetTasks(currentGroup)
-
 }
 
 export default Home;
