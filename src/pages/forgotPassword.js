@@ -30,7 +30,7 @@ function toastMsg(message, boolSuccess)
 const sendResetEmail = async () =>
 {
     const email = document.getElementById("email").value
-    const reponse = await fetch('http://localhost:8080/users/forgot-password', {
+    const reponse = await fetch('https://api.getmilos.app/users/forgot-password', {
     method: 'Post',
     headers: {
         'Content-Type': 'application/json',

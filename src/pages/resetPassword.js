@@ -60,7 +60,7 @@ const rstPwd = async (req, res) =>
         return;
     }
 
-    const reponse = await fetch('http://localhost:8080/users/reset-password', {
+    const reponse = await fetch('https://api.getmilos.app/users/reset-password', {
     method: 'Post',
     headers: {
         'Authorization': `Bearer ${info[0]}`,

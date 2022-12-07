@@ -88,7 +88,7 @@ async function signup() {
     enableSignUp();
     return;
   }
-  const reponse = await fetch('http://localhost:8080/users/register', {
+  const reponse = await fetch('https://api.getmilos.app/users/register', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

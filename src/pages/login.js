@@ -77,7 +77,7 @@ async function auth() {
     return;
   } 
   else {
-    const reponse = await fetch('http://localhost:8080/users/login', {
+    const reponse = await fetch('https://api.getmilos.app/users/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -83,7 +83,7 @@ async function loadTaskCounter() {
 async function saveTaskCounter() {
     var userId = loadToken()
 
-    const reponse = await fetch(`http://localhost:8080/users/${userId[1]}`, {
+    const reponse = await fetch(`https://api.getmilos.app/users/${userId[1]}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ async function saveTaskCounter() {
 async function saveTaskGroups() {
     var userId = loadToken()
 
-    const reponse = await fetch(`http://localhost:8080/users/${userId[1]}`, {
+    const reponse = await fetch(`https://api.getmilos.app/users/${userId[1]}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ async function deleteGroup(){
 
     var token = loadToken()
 
-    const reponse = await fetch(`http://localhost:8080/users/${token[1]}`, {
+    const reponse = await fetch(`https://api.getmilos.app/users/${token[1]}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -384,7 +384,7 @@ async function GetTasks(group) {
 async function findUser() {
     let info = loadToken();
 
-    return fetch(`http://localhost:8080/users/${info[0]}`)
+    return fetch(`https://api.getmilos.app/users/${info[0]}`)
     .then((response) => response.json())
     .then((data) => {
         
@@ -397,7 +397,7 @@ async function updateTask(task){
 
     var token = loadToken()
 
-    const reponse = await fetch('http://localhost:8080/tasks', {
+    const reponse = await fetch('https://api.getmilos.app/tasks', {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -410,7 +410,7 @@ async function updateTask(task){
 async function deleteTask(id) {
     var token = loadToken()
 
-    const reponse = await fetch('http://localhost:8080/tasks', {
+    const reponse = await fetch('https://api.getmilos.app/tasks', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -447,7 +447,7 @@ async function createTask() {
         completed: false
     }
 
-    const reponse = await fetch('http://localhost:8080/tasks', {
+    const reponse = await fetch('https://api.getmilos.app/tasks', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
