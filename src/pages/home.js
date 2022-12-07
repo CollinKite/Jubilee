@@ -105,10 +105,13 @@ async function createGroup(event) {
 
     var newGroup = await document.getElementById("newGroup").value
     currentGroup = await newGroup
-    
-    document.getElementById("newGroup").value = ""
+    if(newGroup != ""){
+        document.getElementById("newGroup").value = ""
     loadGroups(currentGroup)
     GetTasks(currentGroup)
+    }
+    
+    
     }
 }
 
@@ -418,6 +421,7 @@ async function deleteTask(id) {
 async function createTask() {
     var token = loadToken()
     var name = document.getElementById('newTask').value
+    if(name != ""){
 
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -449,6 +453,7 @@ async function createTask() {
     console.log(taskCounter)
     await saveTaskCounter()
     GetTasks(currentGroup)
+}
 }
 
 export default Home;
