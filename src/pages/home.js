@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import LoadingScreen from './LoadingScreen';
+import React from 'react';
 import './home.css'
-import { BarLoader } from 'react-spinners';
-import { getActiveElement } from '@testing-library/user-event/dist/utils';
 
 import arrow from '../images/arrow.png'
 import remove from '../images/delete.png'
